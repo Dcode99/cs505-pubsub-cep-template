@@ -14,7 +14,7 @@ import java.net.URI;
 
 public class Launcher {
 
-    public static final String API_SERVICE_KEY = "1234"; //Change this to your student id
+    public static final String API_SERVICE_KEY = "912141777"; //Change this to your student id
     public static final int WEB_PORT = 8082;
     public static String inputStreamName = null;
     public static long accessCount = -1;
@@ -44,6 +44,14 @@ public class Launcher {
                 "from PatientInStream#window.timeBatch(5 sec) " +
                 "select patient_status_code, count() as count " +
                 "group by patient_status_code " +
+                "insert into PatientOutStream; ";
+        
+        //not currently used, beginning of alert state queries
+        String queryString2 = " " +
+                "from PatientInStream#window.timeBatch(15 sec) " +
+                "select zip_code, count() as count " +
+                "group by zip_code " +
+                "where 
                 "insert into PatientOutStream; ";
 
         //END MODIFY
