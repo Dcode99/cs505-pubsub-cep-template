@@ -39,6 +39,39 @@ public class API {
     //curl --header "X-Auth-API-key:1234" "http://[linkblueid].cs.uky.edu:8081/api/checkmycep"
 
     @GET
+    @PATH("/getteam")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response checkMyEndpoint(@HeaderParam("X-Auth-API-Key") String authKey) {
+        String responseString = "{}";
+        try {
+            //get remote ip address from request
+            String remoteIP = request.get().getRemoteAddr();
+            //get the timestamp of the request
+            long access_ts = System.currentTimeMillis();
+            System.out.println("IP: " + remoteIP + " Timestamp: " + access_ts);
+
+            //set status to 1 if online
+            String app_status_code = 0;
+            if(Launcher.cepEngine != null) {
+                    app_status_code = 1;
+            }
+
+            responseString = gson.toJson(responseMap);
+
+
+        } catch (Exception ex) {
+
+            StringWriter sw = new StringWriter();
+            ex.printStackTrace(new PrintWriter(sw));
+            String exceptionAsString = sw.toString();
+            ex.printStackTrace();
+
+            return Response.status(500).entity(exceptionAsString).build();
+        }
+        return Response.ok(responseString).header("Access-Control-Allow-Origin", "*").build();
+    }
+    
+    @GET
     @Path("/checkmycep")
     @Produces(MediaType.APPLICATION_JSON)
     public Response checkMyEndpoint(@HeaderParam("X-Auth-API-Key") String authKey) {
